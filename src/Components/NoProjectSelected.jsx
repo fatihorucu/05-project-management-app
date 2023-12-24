@@ -7,7 +7,7 @@ export default function NoProjectSelected() {
         No Project Selected
       </h1>
       <p>Select a project or get started with a new one</p>
-      <button className="font-bold bg-stone-700 text-stone-300 min-h-10 max-w-44 p-2 rounded-md">
+      <button className="bg-stone-700 text-stone-300 min-h-10 max-w-44 p-2 rounded-md">
         Create new Project
       </button>
     </div>
