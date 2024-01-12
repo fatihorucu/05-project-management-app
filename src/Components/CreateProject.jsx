@@ -1,12 +1,39 @@
-export default function CreateProject() {
+import { useRef, useImperativeHandle, forwardRef, useState } from "react";
+
+let projectIndex = -1;
+
+export default function CreateProject({ onCancel, onSave }) {
+  const title = useRef();
+  const description = useRef();
+  const dueDate = useRef();
+
+  function handleSave() {
+    const savedTitle = title.current.value;
+    const savedDescription = description.current.value;
+    const savedDueDate = dueDate.current.value;
+    projectIndex += 1;
+
+    onSave({
+      title: savedTitle,
+      description: savedDescription,
+      dueDate: savedDueDate,
+      projectIndex: projectIndex,
+    });
+  }
   return (
     <div className="w-3/4">
       <div className="container mx-auto w-4/5 flex flex-col gap-6 h-full mt-20">
         <div className="flex justify-end gap-4">
-          <button className="hover:bg-neutral-200 rounded-md min-h-10 max-w-32 px-4">
+          <button
+            onClick={onCancel}
+            className="hover:bg-neutral-200 rounded-md min-h-10 max-w-32 px-4"
+          >
             Cancel
           </button>
-          <button className="bg-black text-stone-300 rounded-md min-h-10 max-w-32 px-6 hover:bg-neutral-800">
+          <button
+            onClick={handleSave}
+            className="bg-black text-stone-300 rounded-md min-h-10 max-w-32 px-6 hover:bg-neutral-800"
+          >
             Save
           </button>
         </div>
@@ -19,6 +46,7 @@ export default function CreateProject() {
               name="title"
               type="text"
               className="text-stone-600 bg-stone-300 rounded-sm"
+              ref={title}
             ></input>
           </div>
           <div className="flex flex-col gap-1">
@@ -28,6 +56,7 @@ export default function CreateProject() {
             <textarea
               name="description"
               className="text-stone-600 bg-stone-300 rounded-sm "
+              ref={description}
             ></textarea>
           </div>
           <div className="flex flex-col gap-1">
@@ -39,6 +68,7 @@ export default function CreateProject() {
               rows="4"
               cols="50"
               className="text-stone-600 bg-stone-300 rounded-sm"
+              ref={dueDate}
             />
           </div>
         </div>

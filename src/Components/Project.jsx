@@ -1,14 +1,41 @@
-function Project() {
+import { useState, useRef } from "react";
+import TaskList from "./TaskList";
+
+function Project({ currentIndex, projectList }) {
+  const [tasks, setTask] = useState([]);
+  const task = useRef();
+  const clearButton = useRef();
+
+  const selectedProject = projectList[currentIndex];
+
+  const formattedDate = new Date(selectedProject.dueDate).toLocaleDateString(
+    "tr-TR",
+    { day: "numeric", month: "short", year: "numeric" }
+  );
+
+  function handleSave() {
+    setTask((prevValue) => {
+      return [...prevValue, task.current.value];
+    });
+  }
+
+  function handleDelete(i) {
+    setTask((prevValue) => {
+      return prevValue.filter((element, index) => index !== i);
+    });
+  }
   return (
     <div className="w-3/4">
       <div className="container mx-auto flex flex-col gap-4 w-4/5 mt-16">
         <div className="flex flex-col text-lg">
           <div className="flex justify-between">
-            <h1 className="text-4xl text-slate-800">Heading</h1>
+            <h1 className="text-4xl text-slate-800">{selectedProject.title}</h1>
             <button className="hover:text-stone-600">Delete</button>
           </div>
-          <p className=" text-stone-500">Date</p>
-          <p className="pt-5 text-stone-800">Description</p>
+          <p className=" text-stone-500">{formattedDate}</p>
+          <p className="pt-5 text-stone-800 whitespace-pre-wrap">
+            {selectedProject.description}
+          </p>
         </div>
         <hr />
         <div className="flex flex-col gap-4">
@@ -18,21 +45,16 @@ function Project() {
               type="text"
               name="addTask"
               className="bg-stone-200 rounded-md min-w-28 w-56 min-h-8"
+              ref={task}
             />
-            <button className="text-md hover:text-stone-600 text-stone-800">
+            <button
+              onClick={handleSave}
+              className="text-md hover:text-stone-600 text-stone-800"
+            >
               Add Task
             </button>
           </div>
-          <ol className="px-4 py-8 bg-stone-100 rounded-md flex flex-col gap-4">
-            <li className="flex justify-between">
-              Practice,Practice,Practice{" "}
-              <button className="hover:text-red-500">Clear</button>
-            </li>
-            <li className="flex justify-between">
-              Practice,Practice,Practice{" "}
-              <button className="hover:text-red-500">Clear</button>
-            </li>
-          </ol>
+          <TaskList tasks={tasks} onDelete={handleDelete} />
         </div>
       </div>
     </div>
